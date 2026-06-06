@@ -1,7 +1,7 @@
 # MERN-Stack
 
 So what is MERN Stack?
- M = MongoDB
- E = Express
- R = React
- N = Node.js
+ M = MongoDB   -> Place to store data
+ E = Express   -> A Web Framework
+ R = React     -> Frontend Library
+ N = Node.js   -> Allow JS to run on server
