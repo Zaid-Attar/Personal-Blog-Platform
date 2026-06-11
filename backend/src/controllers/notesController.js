@@ -1,5 +1,11 @@
-export const getAllNotes = (req, res) => {
-  res.status(200).send("You just fetched the notes.");
+export async function getAllNotes(req, res) {
+  try {
+    const notes = await Note.find();
+    res.status(200).json(notes);
+  } catch (error) {
+    console.error("Error in getAllNotes.", error);
+    res.status(500).json({ message: "Error fetching notes." });
+  }
 }
 
 export function createNote(req, res) {

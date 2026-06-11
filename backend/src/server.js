@@ -1,28 +1,21 @@
-  import express from "express"
-  import notesRoutes from "./routes/notesRoutes.js"
+import express from "express"
+import notesRoutes from "./routes/notesRoutes.js"
+import { connectDB } from "./config/db.js"  
+import dotenv from "dotenv";
 
-  const app = express();
+dotenv.config(); // Load environment variables from .env file
+console.log(process.env.MONGO_URI);
 
-  app.use("/api/notes", notesRoutes);
-  // app.get("/api/notes", (req, res) => {
-  //   res.status(200).send("You got 69 notes.");
-  // })
+const app = express();
+const PORT = process.env.PORT || 5090;
 
-  // app.post("/api/notes", (req, res) => {
-  //   res.status(201).json({ message: "Post created successfully." });
-  // })
+connectDB();
 
-  // app.put("/api/notes/:id", (req, res) => {
-  //   res.status(200).json({ message: "Post updated successfully." });
-  // })
-
-  // app.delete("/api/notes/:id", (req, res) => {
-  //   res.status(200).json({ message: "Post updated successfully." });
-  // })
-
-  app.listen(5090, () => {
-    console.log("Server is running on port : 5090");
-  });
+app.use("/api/notes", notesRoutes);
+  
+app.listen(PORT, () => {
+  console.log(`Server is running on Port : ${PORT}`);
+});
 
   /*
   To run the server, use the command: 
