@@ -26,7 +26,7 @@ app.use((req,res,next)=>{
 app.use("/api/notes", notesRoutes);
 
 connectDB().then(() => {
-  console.log("Connected to MongoDB successfully.");
+  //console.log("Connected to MongoDB successfully.");
   app.listen(PORT, () => {
     console.log(`Server is running on Port : ${PORT}`);
   });
