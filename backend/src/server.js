@@ -12,15 +12,17 @@ console.log(process.env.MONGO_URI);
 const app = express();
 const PORT = process.env.PORT || 5090;
 
+//
+// order of these middlewares is important, cors should be before rateLimiter and bodyParser
+//
+app.use(cors({
+  origin: "http://localhost:5173", // Allow requests from this origin
+}));
+
 //connectDB();
 // Changed from express.json() to bodyParser.json() to ensure proper parsing of JSON bodies
 app.use(bodyParser.json()); // Middleware to parse JSON bodies
 app.use(rateLimiter); // Apply rate limiting middleware
-app.use(cors({
-  origin: "http://localhost:5173", // Allow requests from this origin
-  //methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
-  //allowedHeaders: ["Content-Type", "Authorization"], // Allow these headers
-}));
 
 app.use((req,res,next)=>{
   console.log("We just got a new request!");

@@ -9,12 +9,11 @@ import Navbar from "./components/Navbar";
 const App = () => {
   return (
     <div data-theme="forest">
-      
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create" element={<CreatePage />} />
-        <Route path="/note/:id" element={<NoteDetailPage />} />
+        <Route path="/notes/:id" element={<NoteDetailPage />} />
       </Routes>
       {/* <h1>Welcome to the MERN Stack App</h1> */}
     </div>
