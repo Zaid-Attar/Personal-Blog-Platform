@@ -5,12 +5,15 @@ import { connectDB } from "./config/db.js"
 import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
 import cors from "cors";
+import path from "path";
+
 
 dotenv.config(); // Load environment variables from .env file
 console.log(process.env.MONGO_URI);
 
 const app = express();
 const PORT = process.env.PORT || 5090;
+const __dirname = path.resolve();
 
 //
 // order of these middlewares is important, cors should be before rateLimiter and bodyParser
@@ -32,6 +35,12 @@ app.use((req,res,next)=>{
 });
 
 app.use("/api/notes", notesRoutes);
+
+app.use(express.static(path.join(__dirname,"../frontend/dist")));
+
+app.get("*",(req,res)=>{
+  res.sendFile(path.join(__dirname,"../frontend","dist","index.html"));
+});  
 
 connectDB().then(() => {
   //console.log("Connected to MongoDB successfully.");
