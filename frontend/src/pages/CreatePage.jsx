@@ -4,10 +4,10 @@ import { ArrowLeftIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '../lib/axios'
 
-
 const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate()
@@ -15,18 +15,19 @@ const CreatePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title.trim() || !content.trim()) {
+    if (!title.trim() || !content.trim() || !author.trim()) {
       toast.error("All Fields are Required");
       return;
     }
 
     setLoading(true);
     try {
-      await api.post("/notes/", {
+      await api.post("/posts/", {
         title,
         content,
+        author,
       });
-      toast.success("Note Created Successfully!!");
+      toast.success("Post Created Successfully!!");
       navigate("/");
     } catch (error) {
       console.log("Error", error);
@@ -36,12 +37,13 @@ const CreatePage = () => {
           icon: "💀",
         });
       } else {
-        toast.error("Failed to create a Note.");
+        toast.error("Failed to create a Post.");
       }
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen bg-base-200">
       <div className="container mx-auto p-5">
@@ -49,35 +51,45 @@ const CreatePage = () => {
           <div className="flex items-center mb-4">
             <Link to="/" className="btn btn-ghost mb-6">
               <ArrowLeftIcon className="size-5" />
-              Back to Notes
+              Back to Blog
             </Link>
           </div>
 
           <div className="card bg-base-100 shadow-md p-6">
             <div className="card-body">
-              <h2 className="card-title text-2xl mb-4">Create New Note</h2>
+              <h2 className="card-title text-2xl mb-4">Create New Post</h2>
               <form onSubmit={handleSubmit}>
-                {/* // 1st Part of the form: Title field */}
+                <div className="form-control mb-4">
+                  <label className="label">
+                    <span className="label-text">Author</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter author name"
+                    className="input input-bordered"
+                    value={author}
+                    onChange={(e) => setAuthor(e.target.value)}
+                  />
+                </div>
                 <div className="form-control mb-4">
                   <label className="label">
                     <span className="label-text">Title</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Enter note title"
+                    placeholder="Enter post title"
                     className="input input-bordered"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
-                {/* // 2nd Part of the form: Content field */}
                 <div className="form-control mb-4">
                   <label className="label">
                     <span className="label-text">Content</span>
                   </label>
                   <textarea
-                    placeholder="Enter note content"
-                    className="textarea textarea-bordered"
+                    placeholder="Enter post content"
+                    className="textarea textarea-bordered min-h-32"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />
@@ -85,16 +97,15 @@ const CreatePage = () => {
 
                 <div className="card-actions justify-end">
                   <button type="submit" className="btn btn-primary" disabled={loading}>
-                    {loading ? "Creating..." : "Create Note"}
-
+                    {loading ? "Creating..." : "Create Post"}
                   </button>
                 </div>
               </form>
             </div>
           </div>
-          </div>
         </div>
       </div>
+    </div>
   )
 }
 

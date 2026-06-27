@@ -2,7 +2,7 @@
 // 2 - create a model based off the schema
 import mongoose from "mongoose";
 
-const noteSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -11,6 +11,11 @@ const noteSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    author: {
+        type: String,
+        required: true,
+        default: "Anonymous"
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -18,6 +23,6 @@ const noteSchema = new mongoose.Schema({
 },
 {timestamps: true});
 
-const Note = mongoose.model("Note", noteSchema);
+const Post = mongoose.model("Post", postSchema);
 
-export default Note;
+export default Post;

@@ -4,7 +4,7 @@ const rateLimiter = async (req, res, next) => {
     try {
         const { success } = await ratelimiter.limit(req.ip);
         if (!success) {
-        return res.status(429).json({ error: "Toooo many requests" });
+            return res.status(429).json({ error: "Toooo many requests" });
         }
         next();
     } catch (error) {

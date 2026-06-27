@@ -1,67 +1,61 @@
-//import { Trash2Icon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router'
 import { ArrowLeftIcon, Trash2Icon } from 'lucide-react'
 import api from '../lib/axios'
 import { toast } from 'react-hot-toast'
 
-
-
-const NoteDetailPage = () => {
-  const [note, setNote] = useState({ title: '', content: '' });
+const PostDetailPage = () => {
+  const [post, setPost] = useState({ title: '', content: '', author: '' });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const navigate = useNavigate();
-
-  const{id} = useParams();
-
-  console.log({id});
+  const {id} = useParams();
 
   useEffect(() => {
-    const fetchNote = async() => {
+    const fetchPost = async() => {
       try {
-        const res = await api.get(`/notes/${id}`);
-        setNote(res.data);
+        const res = await api.get(`/posts/${id}`);
+        setPost(res.data);
       } catch (error) {
-        toast.error("Error");
+        toast.error("Error fetching post");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchNote();
+    fetchPost();
   }, [id]);
 
-  console.log({note}); 
-
   const handleDelete = async () => {
-    if(!window.confirm("Are you sure, you wanna delete this note?")) return;
+    if(!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      await api.delete(`/notes/${id}`);
-      toast.success("Note Successfully Deleted!!");
+      await api.delete(`/posts/${id}`);
+      toast.success("Post Successfully Deleted!!");
       navigate("/");
     } catch (error) {
-      toast.error("Failed to Delete the Note.");
+      toast.error("Failed to Delete the Post.");
     }
   };
+
   const handleSave = async () => {
-    if (!note.title.trim() || !note.content.trim()) {
+    if (!post.title.trim() || !post.content.trim() || !post.author.trim()) {
       toast.error("All Fields are Required");
       return;
     }
 
     setSaving(true);
     try {
-      await api.put(`/notes/${id}`, {
-        title: note.title,
-        content: note.content,
+      await api.put(`/posts/${id}`, {
+        title: post.title,
+        content: post.content,
+        author: post.author,
       });
-      toast.success("Note Successfully Updated!!");
+      toast.success("Post Successfully Updated!!");
       navigate("/");
     } catch (error) {
-      toast.error("Failed to Update the Note.");
+      toast.error("Failed to Update the Post.");
     } finally {
       setSaving(false);
     }
@@ -70,10 +64,11 @@ const NoteDetailPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
-        <span>Loading note...</span>
+        <span>Loading post...</span>
       </div>
     );
   }
+
   return (
     <div className="min-h-screen bg-base-200">
       <div className="container mx-auto p-5">
@@ -81,11 +76,11 @@ const NoteDetailPage = () => {
           <div className="flex items-center mb-4">
             <Link to="/" className="btn btn-ghost mb-6">
               <ArrowLeftIcon className="size-5" />
-              Back to Notes
+              Back to Blog
             </Link>
-            <button onClick={handleDelete} className="btn btn-error mb-6">
+            <button onClick={handleDelete} className="btn btn-error mb-6 ml-auto">
               <Trash2Icon className="size-5"/>
-              Delete Note
+              Delete Post
             </button>
           </div>
 
@@ -93,32 +88,42 @@ const NoteDetailPage = () => {
             <div className="card-body">
               <div className="form-control mb-4">
                 <label className="label">
+                  <span className="label-text">Author</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter author name"
+                  className="input input-bordered"
+                  value={post.author}
+                  onChange={(e) => setPost({ ...post, author: e.target.value })}
+                />
+              </div>
+              <div className="form-control mb-4">
+                <label className="label">
                   <span className="label-text">Title</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter note title"
+                  placeholder="Enter post title"
                   className="input input-bordered"
-                  value={note.title}
-                  onChange={(e) => setNote({ ...note, title: e.target.value })}
+                  value={post.title}
+                  onChange={(e) => setPost({ ...post, title: e.target.value })}
                 />
-
               </div>
-              <div className="form-control">
+              <div className="form-control mb-4">
                 <label className="label">
                   <span className="label-text">Content</span>
                 </label>
-                <input
-                  type="text"
-                  placeholder="Enter note content"
-                  className="input input-bordered"
-                  value={note.content}
-                  onChange={(e) => setNote({ ...note, content: e.target.value })}
+                <textarea
+                  placeholder="Enter post content"
+                  className="textarea textarea-bordered min-h-32"
+                  value={post.content}
+                  onChange={(e) => setPost({ ...post, content: e.target.value })}
                 />
               </div>
-              <div className="card-actions justify-end">
+              <div className="card-actions justify-end mt-4">
                 <button className="btn btn-primary" disabled={saving} onClick={handleSave}>
-                  {saving ? "Saving..." : "Save Note"}
+                  {saving ? "Saving..." : "Save Post"}
                 </button>
               </div>
             </div>
@@ -129,4 +134,4 @@ const NoteDetailPage = () => {
   )
 }
 
-export default NoteDetailPage
+export default PostDetailPage
