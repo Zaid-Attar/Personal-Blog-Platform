@@ -17,9 +17,7 @@ const __dirname = path.resolve();
 //
 // order of these middlewares is important, cors should be before rateLimiter and bodyParser
 //
-app.use(cors({
-  origin: "http://localhost:5173", // Allow requests from this origin
-}));
+app.use(cors());
 
 //connectDB();
 // Changed from express.json() to bodyParser.json() to ensure proper parsing of JSON bodies
