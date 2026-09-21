@@ -8,9 +8,8 @@ const rateLimiter = async (req, res, next) => {
         }
         next();
     } catch (error) {
-        console.error("Error occurred while checking rate limit:", error);
-        res.status(500).json({ error: "Internal server error" });
-        
+        console.error("Error occurred while checking rate limit (falling back):", error);
+        next(); // Graceful fallback: don't block users if Redis is sleeping/paused
     }
 };
 
